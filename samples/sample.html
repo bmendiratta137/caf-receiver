@@ -1,0 +1,50 @@
+<html>
+<head>
+    <script type="text/javascript" src="agent.js"></script>
+
+    <!-- New Relic Video -->
+    <script src="../dist/newrelic-caf.min.js"></script>
+
+    <!-- CAF Receiver SDK -->
+    <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+</head>
+<body>
+    <cast-media-player></cast-media-player>
+    <script>
+
+        // Capture JS errors
+        window.onerror = function (msg, url, line) {
+            console.log("Message : " + msg );
+            console.log("url : " + url );
+            console.log("Line number : " + line );
+            newrelic.addPageAction("JSError", {"errMessage": msg, "errUrl": url, "errLine": line})
+        }
+
+        cast.framework.CastReceiverContext.getInstance().start();
+        cast.framework.CastReceiverContext.getInstance().setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
+
+        // Set logging level (show all messages)
+        nrvideo.Log.level = nrvideo.Log.Levels.ALL;
+
+        // Config New Relic Insights backend
+        //nrvideo.Core.setBackend(new nrvideo.NRInsightsBackend("ACCOUNT ID", "API KEY"));
+        
+        // Init CAF Tracker
+        nrvideo.Core.addTracker(new nrvideo.CAFTracker());
+
+        let playerManager = cast.framework.CastReceiverContext.getInstance().getPlayerManager();
+        playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, request => {
+            console.log("Intercepting LOAD request");
+            
+            const vmapUrl = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=" + Math.floor(Math.random() * Math.pow(10, 10));
+
+            request.media.vmapAdsRequest = {
+                adTagUrl: vmapUrl,
+            };
+
+            return request;
+        });
+
+    </script>
+</body>
+</html>
