@@ -242,6 +242,7 @@ export default class CAFTracker extends nrvideo.VideoTracker {
   onPause (ev) {
     nrvideo.Log.debug("onPause  = ", ev)
     if (!ev.ended) {
+      console.log("Pause")
       this.sendPause()
     }
   }
