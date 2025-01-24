@@ -1,7 +1,6 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="agent.js"></script>
-
     <!-- New Relic Video -->
     <script src="../dist/newrelic-caf.min.js"></script>
 
@@ -10,53 +9,69 @@
     <title>Cast Videos: Google Cast Chrome Sender SDK Demo App</title>
     <link rel="icon" type="image/x-icon" href="imagefiles/favicon.ico" />
     <link rel="icon" type="image/png" href="imagefiles/favicon-16x16.png" />
+    <link rel="icon" type="image/png" href="imagefiles/favicon-16x16.png" />
     <link rel="icon" type="image/png" href="imagefiles/favicon-32x32.png" />
     <link rel="icon" type="image/png" href="imagefiles/favicon-64x64.png" />
     <link rel="stylesheet" type="text/css" href="css/CastVideos.css">
-    <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet'
-      type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <cast-media-player></cast-media-player>
+  <cast-media-player id="media-player"></cast-media-player>
 
-    
-      <script src="CastVideos.js" type="module"></script>
-      <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
-    <script>
+  <script src="CastVideos.js" type="module"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  <script>
+    // Initialize New Relic Video Tracker
+    const videoElement = document.getElementsByTagName('cast-media-player')[0];
+    const newRelicTracker = new NewRelicVideoTracker({
+        licenseKey: 'NRBR-940177a1ae3f2107673',
+        applicationID: '601520543',
+        videoElement: videoElement // Make sure this references the correct element
+    });
+    console.log('New Relic Tracker initialized');
 
-        // Capture JS errors
-        window.onerror = function (msg, url, line) {
-            console.log("Message : " + msg );
-            console.log("url : " + url );
-            console.log("Line number : " + line );
-            newrelic.addPageAction("JSError", {"errMessage": msg, "errUrl": url, "errLine": line})
-        }
+    // Initialize Cast Application Framework
+    const context = cast.framework.CastReceiverContext.getInstance();
+    const playerManager = context.getPlayerManager();
 
-        cast.framework.CastReceiverContext.getInstance().start();
-        cast.framework.CastReceiverContext.getInstance().setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
+    playerManager.addEventListener(cast.framework.events.EventType.PLAYER_LOAD_COMPLETE, () => {
+        newRelicTracker.trackLoad();
+        console.log('PLAYER_LOAD_COMPLETE event tracked');
+    });
 
-        // Set logging level (show all messages)
-        nrvideo.Log.level = nrvideo.Log.Levels.ALL;
+    playerManager.addEventListener(cast.framework.events.EventType.PLAY, () => {
+        newRelicTracker.trackPlay();
+        console.log('PLAY event tracked');
+    });
 
-        // Config New Relic Insights backend
-        nrvideo.Core.setBackend(new nrvideo.NRInsightsBackend("11649900", "NRBR-35ebbb76d3c71605795"));
-        
-        // Init CAF Tracker
-        nrvideo.Core.addTracker(new nrvideo.CAFTracker());
+    playerManager.addEventListener(cast.framework.events.EventType.PAUSE, () => {
+        newRelicTracker.trackPause();
+        console.log('PAUSE event tracked');
+    });
 
-        let playerManager = cast.framework.CastReceiverContext.getInstance().getPlayerManager();
-        playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, request => {
-            console.log("Intercepting LOAD request");
-            
-            const vmapUrl = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=" + Math.floor(Math.random() * Math.pow(10, 10));
+    playerManager.addEventListener(cast.framework.events.EventType.ENDED, () => {
+        newRelicTracker.trackEnd();
+        console.log('ENDED event tracked');
+    });
 
-            request.media.vmapAdsRequest = {
-                adTagUrl: vmapUrl,
-            };
+    playerManager.addEventListener(cast.framework.events.EventType.ERROR, (event) => {
+        newRelicTracker.trackError(event);
+        console.error('ERROR event tracked', event);
+    });
 
-            return request;
-        });
+    // Start the Cast Receiver
+    context.start();
 
-    </script>
+    // Set logging level (show all messages)
+    cast.framework.CastReceiverContext.getInstance().setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
+
+    // Capture JS errors
+    window.onerror = function (msg, url, line) {
+        console.log("Message: " + msg);
+        console.log("URL: " + url);
+        console.log("Line number: " + line);
+        newrelic.addPageAction("JSError", {"errMessage": msg, "errUrl": url, "errLine": line})
+    }
+  </script>
 </body>
 </html>
