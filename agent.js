@@ -1,44 +1,44 @@
-window.NREUM || (NREUM = {});
-NREUM.init = {
-  privacy: { cookies_enabled: true },
-  ajax: { deny_list: ['bam.nr-data.net'] },
-};
-
-NREUM.loader_config = {
-  accountID: '33',
-  trustKey: '33',
-  agentID: '601520543',
-  licenseKey: 'NRBR-940177a1ae3f2107673',
-  applicationID: '601520543',
-};
-NREUM.info = {
-  beacon: 'bam.nr-data.net',
-  errorBeacon: 'bam.nr-data.net',
-  licenseKey: 'NRBR-940177a1ae3f2107673',
-  applicationID: '601520543',
-  sa: 1,
-}; /*! For license information please see nr-loader-spa-1.278.2.min.js.LICENSE.txt */
-
 // window.NREUM || (NREUM = {});
 // NREUM.init = {
-//   distributed_tracing: { enabled: true },
 //   privacy: { cookies_enabled: true },
-//   ajax: { deny_list: ['staging-bam-cell.nr-data.net'] },
+//   ajax: { deny_list: ['bam.nr-data.net'] },
 // };
+
 // NREUM.loader_config = {
-//   accountID: '11649900',
-//   trustKey: '1',
-//   agentID: '191537704',
-//   licenseKey: 'NRBR-35ebbb76d3c71605795',
-//   applicationID: '191537704',
+//   accountID: '33',
+//   trustKey: '33',
+//   agentID: '601520543',
+//   licenseKey: 'NRBR-940177a1ae3f2107673',
+//   applicationID: '601520543',
 // };
 // NREUM.info = {
-//   beacon: 'staging-bam-cell.nr-data.net',
-//   errorBeacon: 'staging-bam-cell.nr-data.net',
-//   licenseKey: 'NRBR-35ebbb76d3c71605795',
-//   applicationID: '191537704',
+//   beacon: 'bam.nr-data.net',
+//   errorBeacon: 'bam.nr-data.net',
+//   licenseKey: 'NRBR-940177a1ae3f2107673',
+//   applicationID: '601520543',
 //   sa: 1,
-// }; /*! For license information please see nr-loader-spa-1.276.0.min.js.LICENSE.txt */
+// }; /*! For license information please see nr-loader-spa-1.278.2.min.js.LICENSE.txt */
+
+window.NREUM || (NREUM = {});
+NREUM.init = {
+  distributed_tracing: { enabled: true },
+  privacy: { cookies_enabled: true },
+  ajax: { deny_list: ['staging-bam-cell.nr-data.net'] },
+};
+NREUM.loader_config = {
+  accountID: '11649900',
+  trustKey: '1',
+  agentID: '191537704',
+  licenseKey: 'NRBR-35ebbb76d3c71605795',
+  applicationID: '191537704',
+};
+NREUM.info = {
+  beacon: 'staging-bam-cell.nr-data.net',
+  errorBeacon: 'staging-bam-cell.nr-data.net',
+  licenseKey: 'NRBR-35ebbb76d3c71605795',
+  applicationID: '191537704',
+  sa: 1,
+}; /*! For license information please see nr-loader-spa-1.276.0.min.js.LICENSE.txt */
 (() => {
   var e,
     t,
