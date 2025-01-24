@@ -4,7 +4,7 @@
   "description": "New Relic tracker for CAF Receivers",
   "main": "src/index.js",
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "watch": "webpack -p --progress --color --watch",
     "watch:dev": "webpack --progress --color --watch",
@@ -15,7 +15,8 @@
   "author": "Andreu Santarén Llop",
   "license": "MIT",
   "dependencies": {
-    "newrelic-video-core": "file:newrelic-video-core-0.33.0.tgz"
+    "@types/chromecast-caf-receiver": "^6.0.20",
+    "newrelic-video-core": "github:newrelic/video-core-js"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

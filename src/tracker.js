@@ -11,7 +11,6 @@ export default class CAFTracker extends nrvideo.VideoTracker {
     super()
     this.reset()
     this.registerListeners()
-    console.log("CAFTracker initialized");
   }
 
   registerListeners() {
@@ -237,21 +236,18 @@ export default class CAFTracker extends nrvideo.VideoTracker {
 
   onMediaFinished (ev) {
     nrvideo.Log.debug("onMediaFinished  = ", ev)
-    console.log("Pause")
     this.sendEnd()
   }
 
   onPause (ev) {
     nrvideo.Log.debug("onPause  = ", ev)
     if (!ev.ended) {
-      console.log("Pause")
       this.sendPause()
     }
   }
 
   onPlayerLoading (ev) {
     nrvideo.Log.debug("onPlayerLoading  = ", ev)
-    console.log("Pause")
     this.sendRequest()
   }
 
@@ -271,10 +267,8 @@ export default class CAFTracker extends nrvideo.VideoTracker {
     if (!this.adsTracker.state.isAdBreak) {
       nrvideo.Log.debug("onPlaying  = ", ev);
       if (this.state.isPaused) {
-        console.log("Pause")
         this.sendResume()
       } else {
-        console.log("Pause")
         this.sendStart()
       }
     }
