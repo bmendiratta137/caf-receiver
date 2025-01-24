@@ -24,7 +24,9 @@
     const playerManager = context.getPlayerManager();
 
     // Add CAFTracker to New Relic Core
-    nrvideo.Core.addTracker(new nrvideo.CAFTracker());
+    const cafTracker = new nrvideo.CAFTracker();
+    nrvideo.Core.addTracker(cafTracker);
+    console.log('CAFTracker added to New Relic Core');
 
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, request => {
         console.log("Intercepting LOAD request");
@@ -39,17 +41,17 @@
     });
 
     playerManager.addEventListener(cast.framework.events.EventType.PLAYER_LOAD_COMPLETE, () => {
-        newRelicTracker.trackLoad();
+        cafTracker.trackLoad();
         console.log('PLAYER_LOAD_COMPLETE event tracked');
     });
 
     playerManager.addEventListener(cast.framework.events.EventType.PLAY, () => {
-        newRelicTracker.trackPlay();
+        cafTracker.trackPlay();
         console.log('PLAY event tracked');
     });
 
     playerManager.addEventListener(cast.framework.events.EventType.PAUSE, () => {
-        newRelicTracker.trackPause();
+        cafTracker.trackPause();
         console.log('PAUSE event tracked');
     });
   </script>
