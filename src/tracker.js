@@ -11,6 +11,7 @@ export default class CAFTracker extends nrvideo.VideoTracker {
     super()
     this.reset()
     this.registerListeners()
+    console.log("CAFTracker initialized");
   }
 
   registerListeners() {
